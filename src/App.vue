@@ -4,10 +4,23 @@ import { ref } from 'vue'
 const placeholderText = "Because life is better with random ducks."
 
 const duckImg = ref(null)
+const error = ref(null)
 
-const fetchDuck = () => {
-  duckImg.value = `https://random-d.uk/api/v2/random?${Date.now()}`
+const fetchDuck = async() => {
+ error.value = null
+
+ try {
+   const response = await fetch('https://random-d.uk/api/v2/random')
+   if (!response.ok) throw new Error('Network response was not ok')
+   const data = await response.json()
+   duckImg.value = data.url
+ }
+ catch (err) {
+   error.value = 'Quack! Something went wrong.'
+ }
 }
+
+
 
 </script>
 
@@ -21,8 +34,9 @@ const fetchDuck = () => {
       <div v-if="duckImg">
         <img :src="duckImg" />
       </div>
-<p v-else>{{ placehlolderText }}</p>
+    <p v-else>{{ placeholderText }}</p>
     </div>
+    <p v-if="error" role="alert">{{ error }}</p>
 
     <button type="button" @click="fetchDuck">Show me the duck!</button>
 
