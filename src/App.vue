@@ -1,19 +1,31 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref } from 'vue' 
+
+const placeholderText = "Because life is better with random ducks."
+
+const duckImg = ref(null)
+
+const fetchDuck = () => {
+  duckImg.value = `https://random-d.uk/api/v2/random?${Date.now()}`
+}
+
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
+    <h1>Unleash the Ducks!</h1>
   </header>
 
   <main>
-    <TheWelcome />
+    <div>
+      <div v-if="duckImg">
+        <img :src="duckImg" />
+      </div>
+<p v-else>{{ placehlolderText }}</p>
+    </div>
+
+    <button type="button" @click="fetchDuck">Show me the duck!</button>
+
   </main>
 </template>
 
